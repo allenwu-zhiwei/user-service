@@ -1,33 +1,55 @@
 package com.nusiss.userservice.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nusiss.userservice.config.CustomException;
 import com.nusiss.userservice.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class LoginServiceImpl implements LoginService{
 
+    private static final Logger log = LoggerFactory.getLogger(LoginServiceImpl.class);
     @Autowired
     private UserService userService;
 
     @Autowired
     private JwtTokenService jwtTokenService;
 
+    @Autowired
+    private RedisCrudService redisCrudService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Override
     public String login(String username, String password) {
-
         List<User> users = userService.findUserByUsernameAndPassword(username, password);
 
         //validate username
         if(users == null || users.size() != 1){
             throw new CustomException("Invalid username/password.");
+        }
+
+        User user = users.get(0);
+        try {
+            String userJson = objectMapper.writeValueAsString(user);
+            //save user info to redis
+            redisCrudService.save(user.getUsername(), userJson, 30, TimeUnit.MINUTES);
+        } catch (Exception e) {
+            log.error("", e);
+            log.info(e.getMessage());
+            throw new RuntimeException(e);
         }
 
         //get token by username and password

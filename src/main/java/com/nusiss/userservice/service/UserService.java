@@ -20,4 +20,6 @@ public interface UserService {
 
     public List<User> findUserByUsernameAndPassword(String username, String password);
 
+    public User getCurrentUserInfo(String authToken);
+
 }

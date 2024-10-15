@@ -33,7 +33,7 @@ public class JwtTokenService {
         Date expirationDate = java.sql.Timestamp.valueOf(expireDateTime);
 
         // Convert expiration time to string for storing in JWT claims
-        String expireDateTimeStr = expireDateTime.format(DATE_TIME_FORMATTER);
+        //String expireDateTimeStr = expireDateTime.format(DATE_TIME_FORMATTER);
 
         // Add claims (custom fields like username, password, and expireDateTime)
         Map<String, Object> claims = new HashMap<>();
@@ -50,7 +50,7 @@ public class JwtTokenService {
     }
 
     // Set the JWT token in the cookie and add it to the response
-    public void addTokenToCookie(HttpServletResponse response, String token) {
+    /*public void addTokenToCookie(HttpServletResponse response, String token) {
         Cookie authCookie = new Cookie("authCookie", token);
         authCookie.setHttpOnly(true); // To prevent JavaScript access to the cookie
         authCookie.setMaxAge(600); // 600 seconds = 10 minutes
@@ -58,5 +58,5 @@ public class JwtTokenService {
         authCookie.setSecure(false);
         authCookie.setAttribute("SameSite", "Lax");
         response.addCookie(authCookie);
-    }
+    }*/
 }
