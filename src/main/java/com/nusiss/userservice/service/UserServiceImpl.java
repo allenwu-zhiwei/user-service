@@ -3,7 +3,9 @@ package com.nusiss.userservice.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nusiss.userservice.config.CustomException;
+import com.nusiss.userservice.dao.PermissionRepository;
 import com.nusiss.userservice.dao.UserRepository;
+import com.nusiss.userservice.entity.Permission;
 import com.nusiss.userservice.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -28,6 +31,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private PermissionRepository permissionRepository;
 
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
@@ -80,6 +86,21 @@ public class UserServiceImpl implements UserService{
 
     }
 
+    @Override
+    public boolean hasPermission(String authToken, String requestedApi, String method) {
+
+        User user = getCurrentUserInfo(authToken);
+        if (user == null) {
+            return false;
+        }
+
+        // Get all permissions associated with the user's roles
+        Set<Permission> permissions = permissionRepository.findPermissionsByUserRoles(user.getUserId());
+
+        // Check if the user has permission for the requested API and method
+        return permissions.stream()
+                .anyMatch(permission -> permission.getEndpoint().equals(requestedApi) && permission.getMethod().equals(method));
+    }
 
     @Override
     public User saveUser(User user) {

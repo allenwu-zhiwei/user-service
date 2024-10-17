@@ -26,10 +26,6 @@ public class User{
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
-
     @Column(nullable = false, updatable = false)
     private LocalDateTime createDatetime;
 
@@ -53,11 +49,4 @@ public class User{
         this.updateDatetime = LocalDateTime.now();
     }
 
-    // Getters and Setters
-
-    public enum Role {
-        CUSTOMER, SELLER, ADMIN
-    }
-
-    // Add constructors, getters, and setters...
 }

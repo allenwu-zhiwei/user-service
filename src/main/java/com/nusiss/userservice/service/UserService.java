@@ -22,4 +22,6 @@ public interface UserService {
 
     public User getCurrentUserInfo(String authToken);
 
+    public boolean hasPermission(String authToken, String requestedApi, String method);
+
 }
