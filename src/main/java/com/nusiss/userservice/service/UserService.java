@@ -1,6 +1,5 @@
 package com.nusiss.userservice.service;
 
-
 import com.nusiss.userservice.entity.User;
 
 import java.util.List;
