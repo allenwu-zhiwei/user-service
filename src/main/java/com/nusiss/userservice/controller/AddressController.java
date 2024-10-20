@@ -36,6 +36,16 @@ public class AddressController {
         return new ResponseEntity<>(addresses, HttpStatus.OK);
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Address>> getAddressesByUserId(@PathVariable("userId") Integer userId) {
+        List<Address> addresses = addressService.getAddressesByUserId(userId);
+        // 如果地址列表为空，返回 404
+        if (addresses.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return new ResponseEntity<>(addresses, HttpStatus.OK);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Address> updateAddress(@PathVariable("id") Integer addressId,
                                                  @RequestBody Address address) {

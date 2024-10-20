@@ -32,6 +32,11 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    public List<Address> getAddressesByUserId(Integer userId) {
+        return addressRepository.findByUserUserId(userId); // 新增方法实现
+    }
+
+    @Override
     public Address updateAddress(Integer addressId, Address address) {
         if (addressRepository.existsById(addressId)) {
             address.setAddressId(addressId);

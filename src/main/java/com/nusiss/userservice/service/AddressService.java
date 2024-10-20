@@ -12,6 +12,8 @@ public interface AddressService {
 
     List<Address> getAllAddresses();
 
+    List<Address> getAddressesByUserId(Integer userId);
+
     Address updateAddress(Integer addressId, Address address);
 
     void deleteAddress(Integer addressId);
