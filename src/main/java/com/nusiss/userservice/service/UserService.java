@@ -1,6 +1,7 @@
 package com.nusiss.userservice.service;
 
 import com.nusiss.userservice.entity.User;
+import com.nusiss.userservice.entity.Address;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +14,9 @@ public interface UserService {
 
     public Optional<User> getUserByUsername(String username);
 
-    public User saveUser(User user);
+    //public User saveUser(User user);
+
+    User saveUser(User user, List<Address> addresses);
 
     public void deleteUser(Integer id);
 

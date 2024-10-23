@@ -3,8 +3,10 @@ package com.nusiss.userservice.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nusiss.userservice.config.CustomException;
+import com.nusiss.userservice.dao.AddressRepository;
 import com.nusiss.userservice.dao.PermissionRepository;
 import com.nusiss.userservice.dao.UserRepository;
+import com.nusiss.userservice.entity.Address;
 import com.nusiss.userservice.entity.Permission;
 import com.nusiss.userservice.entity.User;
 import io.jsonwebtoken.Claims;
@@ -25,6 +27,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
 
     @Autowired
     private RedisCrudService redisCrudService;
@@ -102,9 +107,26 @@ public class UserServiceImpl implements UserService{
                 .anyMatch(permission -> permission.getEndpoint().equals(requestedApi) && permission.getMethod().equals(method));
     }
 
+//    @Override
+//    public User saveUser(User user) {
+//        return userRepository.save(user);
+//    }
+
+
     @Override
-    public User saveUser(User user) {
-        return userRepository.save(user);
+    public User saveUser(User user, List<Address> addresses) {
+        // 保存用户
+        User savedUser = userRepository.save(user);
+
+        // 保存用户的地址信息
+        if (addresses != null && !addresses.isEmpty()) {
+            addresses.forEach(address -> {
+                address.setUser(savedUser);
+                addressRepository.save(address);
+            });
+        }
+
+        return savedUser;
     }
 
     @Override
