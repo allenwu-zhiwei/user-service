@@ -33,7 +33,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public List<Address> getAddressesByUserId(Integer userId) {
-        return addressRepository.findByUserUserId(userId); // 新增方法实现
+        return addressRepository.findByUserUserId(userId);
     }
 
     @Override

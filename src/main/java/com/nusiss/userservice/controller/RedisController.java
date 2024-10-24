@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.concurrent.TimeUnit;
 
-
+@CrossOrigin(origins = "http://localhost:5000")
 @RestController
 @RequestMapping("/api/redis")
 public class RedisController {
