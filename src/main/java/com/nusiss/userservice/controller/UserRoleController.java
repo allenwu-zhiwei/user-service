@@ -19,9 +19,8 @@ public class UserRoleController {
     // 获取用户的角色（单个）
     @GetMapping("/user/{userId}")
     public ResponseEntity<Role> getUserRole(@PathVariable Long userId) {
-        Optional<Role> role = userRoleService.getRoleByUserId(userId);
-        return role.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Role role = userRoleService.getRoleByUserId(userId);
+        return ResponseEntity.of(Optional.ofNullable(role));
     }
 
     // 为用户添加角色
