@@ -18,13 +18,11 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Autowired
     private RoleRepository roleRepository;
 
-    // 根据用户ID查询关联的角色
-    public Role getRoleByUserId(Long userId) {
-        // 获取用户的 UserRole 实体
-        Optional<UserRole> userRole = userRoleRepository.findByUserId(userId);
 
-        // 如果存在，则根据 roleId 查找角色
-        return roleRepository.findById(userRole.get().getRoleId()).orElse(null);
+    // 根据用户ID获取角色
+    public Optional<Role> getRoleByUserId(Long userId) {
+        return userRoleRepository.findByUserId(userId)
+                .map(userRole -> roleRepository.findById(userRole.getRoleId()).orElse(null));
     }
 
     // 为用户添加新角色

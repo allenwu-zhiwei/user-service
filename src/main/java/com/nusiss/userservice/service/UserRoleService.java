@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface UserRoleService
 {
-    public Role getRoleByUserId(Long userId);
+    public Optional<Role> getRoleByUserId(Long userId);
 
     public void addRoleToUser(Long userId, Long roleId);
 
