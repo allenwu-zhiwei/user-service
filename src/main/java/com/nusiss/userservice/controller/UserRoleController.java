@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:5000")
+//@CrossOrigin(origins = "http://localhost:5000")
 @RestController
 @RequestMapping("/user-roles")
 public class UserRoleController {
