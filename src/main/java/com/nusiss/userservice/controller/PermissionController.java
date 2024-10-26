@@ -4,7 +4,7 @@ import com.nusiss.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-//@CrossOrigin(origins = "http://localhost:5000")
+@CrossOrigin(origins = "http://localhost:5000")
 @RestController()
 public class PermissionController {
 
