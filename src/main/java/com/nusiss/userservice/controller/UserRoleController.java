@@ -22,4 +22,12 @@ public class UserRoleController {
         Optional<Role> role = userRoleService.getRoleByUserId(userId);
         return role.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    // 为用户创建角色
+    @PostMapping("/create")
+    public ResponseEntity<Role> createUserRole(@RequestParam Long roleId, @RequestParam Long userId) {
+        userRoleService.createRoleForUser(roleId, userId);
+        return ResponseEntity.ok().build();
+    }
+
 }

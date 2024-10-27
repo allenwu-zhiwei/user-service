@@ -1,9 +1,10 @@
 package com.nusiss.userservice.service;
 
 import com.nusiss.userservice.entity.Role;
+import com.nusiss.userservice.entity.UserRole;
+import com.nusiss.userservice.entity.UserRoleId;
 import com.nusiss.userservice.dao.RoleRepository;
 import com.nusiss.userservice.dao.UserRoleRepository;
-import com.nusiss.userservice.entity.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,4 +28,17 @@ public class UserRoleServiceImpl implements UserRoleService {
         return Optional.empty();
     }
 
+    @Override
+    public void createRoleForUser(Long roleId, Long userId) {
+        // 创建 UserRoleId 作为复合主键
+        UserRoleId userRoleId = new UserRoleId();
+        userRoleId.setUserId(userId);
+        userRoleId.setRoleId(roleId);
+
+        // 创建 UserRole 实体并保存
+        UserRole userRole = new UserRole();
+        userRole.setId(userRoleId);
+
+        userRoleRepository.save(userRole);
+    }
 }
