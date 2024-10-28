@@ -33,24 +33,24 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.status(404).body(new ApiResponse<>(false, "User not found", null)));
     }
 
-//    @PostMapping
-//    public ResponseEntity<ApiResponse<User>> createUser(@RequestBody User user) {
-//        User savedUser = userService.saveUser(user);
-//        return ResponseEntity.status(201).body(new ApiResponse<>(true, "User created successfully", savedUser));
-//    }
-
     @PostMapping
-    public ResponseEntity<ApiResponse<User>> createUser(@RequestBody User user, @RequestBody List<Address> addresses) {
-        User savedUser = userService.saveUser(user, addresses);  // 修改：传递地址列表
-        return ResponseEntity.status(201).body(new ApiResponse<>(true, "User and address created successfully", savedUser));
+    public ResponseEntity<ApiResponse<User>> createUser(@RequestBody User user) {
+        User savedUser = userService.saveUser(user);
+        return ResponseEntity.status(201).body(new ApiResponse<>(true, "User created successfully", savedUser));
     }
+
+//    @PostMapping
+//    public ResponseEntity<ApiResponse<User>> createUser(@RequestBody User user, @RequestBody List<Address> addresses) {
+//        User savedUser = userService.saveUser(user, addresses);  // 修改：传递地址列表
+//        return ResponseEntity.status(201).body(new ApiResponse<>(true, "User and address created successfully", savedUser));
+//    }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<User>> updateUser(@PathVariable Integer id, @RequestBody User updatedUser) {
         Optional<User> existingUser = userService.getUserById(id);
         if (existingUser.isPresent()) {
             updatedUser.setUserId(id);
-            User savedUser = userService.saveUser(updatedUser, new ArrayList<>());
+            User savedUser = userService.saveUser(updatedUser);
             return ResponseEntity.ok(new ApiResponse<>(true, "User updated successfully", savedUser));
         } else {
             return ResponseEntity.status(404).body(new ApiResponse<>(false, "User not found", null));

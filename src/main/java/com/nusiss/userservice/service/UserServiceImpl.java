@@ -107,27 +107,27 @@ public class UserServiceImpl implements UserService{
                 .anyMatch(permission -> permission.getEndpoint().equals(requestedApi) && permission.getMethod().equals(method));
     }
 
-//    @Override
-//    public User saveUser(User user) {
-//        return userRepository.save(user);
-//    }
-
-
     @Override
-    public User saveUser(User user, List<Address> addresses) {
-        // 保存用户
-        User savedUser = userRepository.save(user);
-
-        // 保存用户的地址信息
-        if (addresses != null && !addresses.isEmpty()) {
-            addresses.forEach(address -> {
-                address.setUser(savedUser);
-                addressRepository.save(address);
-            });
-        }
-
-        return savedUser;
+    public User saveUser(User user) {
+        return userRepository.save(user);
     }
+
+
+//    @Override
+//    public User saveUser(User user, List<Address> addresses) {
+//        // 保存用户
+//        User savedUser = userRepository.save(user);
+//
+//        // 保存用户的地址信息
+//        if (addresses != null && !addresses.isEmpty()) {
+//            addresses.forEach(address -> {
+//                address.setUser(savedUser);
+//                addressRepository.save(address);
+//            });
+//        }
+//
+//        return savedUser;
+//    }
 
     @Override
     public void deleteUser(Integer id) {
