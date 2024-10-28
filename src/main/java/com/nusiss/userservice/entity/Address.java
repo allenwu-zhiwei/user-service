@@ -1,61 +1,58 @@
 package com.nusiss.userservice.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "address")
+@Table(name = "address", schema = "nusmall_user")
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer addressId;
+    @Column(name = "address_id", nullable = false)
+    private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @NotNull
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
-    @Column(nullable = false)
+    @Size(max = 255)
+    @NotNull
+    @Column(name = "street", nullable = false)
     private String street;
 
-    @Column(nullable = false)
+    @Size(max = 100)
+    @NotNull
+    @Column(name = "city", nullable = false, length = 100)
     private String city;
 
-    @Column(nullable = false)
+    @Size(max = 100)
+    @NotNull
+    @Column(name = "state", nullable = false, length = 100)
     private String state;
 
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createDatetime;
-
-    @Column(nullable = false)
-    private LocalDateTime updateDatetime;
-
-    @Column(nullable = false)
+    @Size(max = 100)
+    @NotNull
+    @Column(name = "create_user", nullable = false, length = 100)
     private String createUser;
 
-    @Column(nullable = false)
+    @Size(max = 100)
+    @Column(name = "update_user", length = 100)
     private String updateUser;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createDatetime = LocalDateTime.now();
-        this.updateDatetime = LocalDateTime.now();
-    }
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name = "create_datetime")
+    private Instant createDatetime;
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.updateDatetime = LocalDateTime.now();
-    }
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name = "update_datetime")
+    private Instant updateDatetime;
 
 }

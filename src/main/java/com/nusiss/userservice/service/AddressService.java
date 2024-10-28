@@ -6,15 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AddressService {
-    Address createAddress(Address address);
+    public Optional<Address> getAddressById(Long addressId);
 
-    Optional<Address> getAddressById(Integer addressId);
+    public List<Address> getAddressesByUserId(Long userId);
 
-    List<Address> getAllAddresses();
+    public Address createAddress(Address address);
 
-    List<Address> getAddressesByUserId(Integer userId);
+    public Address updateAddress(Long addressId, Address newAddressData);
 
-    Address updateAddress(Integer addressId, Address address);
-
-    void deleteAddress(Integer addressId);
+    public void deleteAddress(Long addressId);
 }
