@@ -1,5 +1,6 @@
 package com.nusiss.userservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "User")
 @Setter
 @Getter
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User{
 
     @Id
