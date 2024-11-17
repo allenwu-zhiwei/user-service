@@ -1,6 +1,9 @@
 package com.nusiss.userservice.service;
+import org.springframework.stereotype.Service;
+
 import java.util.concurrent.TimeUnit;
 
+@Service
 public interface RedisCrudService {
 
     // Save a key-value pair with expiration time

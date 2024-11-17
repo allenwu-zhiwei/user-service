@@ -1,20 +1,21 @@
+// RedisCrudServiceImplTest.java
 package com.nusiss.userservice.service;
-
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 
 import java.util.concurrent.TimeUnit;
 
-class RedisCrudServiceImplTest {
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-    @InjectMocks
-    private RedisCrudServiceImpl redisCrudService;
+class RedisCrudServiceImplTest {
 
     @Mock
     private RedisTemplate<String, Object> redisTemplate;
@@ -22,14 +23,50 @@ class RedisCrudServiceImplTest {
     @Mock
     private ObjectMapper objectMapper;
 
+    @Mock
+    private ValueOperations<String, Object> valueOperations;
+
+    @InjectMocks
+    private RedisCrudServiceImpl redisCrudService;
+
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);  // Initialize mocks
+        MockitoAnnotations.openMocks(this);
+        when(redisTemplate.opsForValue()).thenReturn(valueOperations);
     }
 
+    @Test
+    void save_ShouldSaveValueWithExpiration() {
+        // Arrange
+        String key = "testKey";
+        String value = "testValue";
+        long timeout = 5;
+        TimeUnit timeUnit = TimeUnit.MINUTES;
+
+        // Act
+        redisCrudService.save(key, value, timeout, timeUnit);
+
+        // Assert
+        verify(valueOperations).set(key, value, timeout, timeUnit);
+    }
 
     @Test
-    void testDelete() {
+    void get_ShouldReturnValue() {
+        // Arrange
+        String key = "testKey";
+        String expectedValue = "testValue";
+        when(valueOperations.get(key)).thenReturn(expectedValue);
+
+        // Act
+        String result = redisCrudService.get(key);
+
+        // Assert
+        assertEquals(expectedValue, result);
+        verify(valueOperations).get(key);
+    }
+
+    @Test
+    void delete_ShouldDeleteKey() {
         // Arrange
         String key = "testKey";
 
@@ -37,11 +74,11 @@ class RedisCrudServiceImplTest {
         redisCrudService.delete(key);
 
         // Assert
-        verify(redisTemplate, times(1)).delete(key);
+        verify(redisTemplate).delete(key);
     }
 
     @Test
-    void testExists() {
+    void exists_ShouldReturnTrue_WhenKeyExists() {
         // Arrange
         String key = "testKey";
         when(redisTemplate.hasKey(key)).thenReturn(true);
@@ -51,11 +88,11 @@ class RedisCrudServiceImplTest {
 
         // Assert
         assertTrue(result);
-        verify(redisTemplate, times(1)).hasKey(key);
+        verify(redisTemplate).hasKey(key);
     }
 
     @Test
-    void testExists_KeyNotPresent() {
+    void exists_ShouldReturnFalse_WhenKeyDoesNotExist() {
         // Arrange
         String key = "testKey";
         when(redisTemplate.hasKey(key)).thenReturn(false);
@@ -65,6 +102,6 @@ class RedisCrudServiceImplTest {
 
         // Assert
         assertFalse(result);
-        verify(redisTemplate, times(1)).hasKey(key);
+        verify(redisTemplate).hasKey(key);
     }
 }
