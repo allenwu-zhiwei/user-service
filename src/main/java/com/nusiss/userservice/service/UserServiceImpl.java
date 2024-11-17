@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,7 +51,15 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Optional<User> getUserById(Integer id) {
-        return userRepository.findById(id);
+        return userRepository.findById(id).map(user -> {
+            // Encrypt the password using bcrypt
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String encryptedPassword = passwordEncoder.encode(user.getPassword());
+            // Replace the user's password with the encrypted version
+            user.setPassword(encryptedPassword);
+            return user;
+        });
+
     }
 
     @Override
