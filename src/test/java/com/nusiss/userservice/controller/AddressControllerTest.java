@@ -1,6 +1,5 @@
-package com.nusiss.userservice;
+package com.nusiss.userservice.controller;
 
-import com.nusiss.userservice.controller.AddressController;
 import com.nusiss.userservice.entity.Address;
 import com.nusiss.userservice.service.AddressService;
 import org.junit.jupiter.api.BeforeEach;
